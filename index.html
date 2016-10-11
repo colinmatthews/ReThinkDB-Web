@@ -1,0 +1,20 @@
+<script src="js/socket.io.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+<script>
+var socket = io.connect('http://127.0.0.1:8090');
+
+socket.emit('getdoctors');
+
+socket.on("doctors", function(data) {
+  console.log(data);
+  for(var i=0; i<data.length; i++){
+	  $("#doctor").append('<a href="appointments.html?id=' + data[i].id +
+	  	'" ><li>'+data[i].name+'</li></a>');
+	}
+});
+
+</script>
+
+
+<ul id="doctor"></ul>

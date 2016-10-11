@@ -1,0 +1,70 @@
+<script src="js/socket.io.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+<style>
+
+.true{
+	color: red;
+}
+
+.false{
+	color: green;
+}
+</style>
+
+<script>
+var times = {
+	'9AM': false,
+	'10AM': false,
+	'11AM': false,
+	'12PM': false,
+	'1PM': false,
+	'2PM': false,
+	'3PM': false,
+	'4PM': false,
+	'5PM': false,
+}
+function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,    
+    function(m,key,value) {
+      vars[key] = value;
+    });
+    return vars;
+  }
+
+var socket = io.connect('http://127.0.0.1:8090');
+ 
+socket.on("doctors", function(data) {
+  console.log(data);
+
+});
+
+socket.on("update", function(data) {
+  // console.log("Update:", data.new_val);
+  times[data.new_val.time] = true;
+  displayappointments();
+});
+
+function displayappointments() {
+	$("#appointment").empty();
+	for (var time in times) {
+	    $("#appointment").append('<li class='+times[time]+'>'+time+'</li>');
+	}
+}
+function viewappointments(data) {
+	console.log(data);
+    for(var i=0; i<data.length; i++){
+    	times[data[i].time] = true;
+    }
+    displayappointments();
+    
+}
+socket.on("appointments", function(data) {
+ 	viewappointments(data);
+});
+
+socket.emit('getappointments', getUrlVars()['id']);
+</script>
+
+<ul id="appointment"></ul>
