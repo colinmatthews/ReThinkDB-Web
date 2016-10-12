@@ -1,8 +1,9 @@
-<script src="js/socket.io.js"></script>
+<!DOCTYPE html>
+<script src="/socket.io/socket.io.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
 <script>
-var socket = io.connect('http://127.0.0.1:8090');
+var socket = io.connect();
 
 socket.emit('getdoctors');
 
@@ -16,5 +17,5 @@ socket.on("doctors", function(data) {
 
 </script>
 
-
+<p>test</p>
 <ul id="doctor"></ul>

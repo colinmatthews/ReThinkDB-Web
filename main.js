@@ -1,11 +1,19 @@
 var r = require('rethinkdb');
-var config = require(__dirname + '/config.js');
+var path = require('path');
+var app = require('express')();
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
 
-var sockio = require("socket.io");
-var app = require("express")();
- 
-var io = sockio.listen(app.listen(8090), {log: false});
-console.log("App listening on port 8090");
+server.listen(8080);
+
+app.get('/', function (req, res) {
+  res.sendFile(__dirname + '/index.html');
+});
+app.get('/appointments*', function (req, res) {
+  res.sendFile(__dirname + '/appointments.html');
+});
+console.log("App listening on port 8080");
+
  
 var dbConfig = {
     host: 'rethinkdb.southcentralus.cloudapp.azure.com',
@@ -37,6 +45,7 @@ function changesinappointment(msg) {
 
  
 io.on("connection", function(socket) {
+	console.log("You connected!");
   
   	// console.log(JSON.stringify(output))
   	// socket.emit("doctors", output); });
@@ -76,3 +85,4 @@ io.on("connection", function(socket) {
 
   	});
 });
+
